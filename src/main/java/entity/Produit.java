@@ -29,10 +29,10 @@ public class Produit extends Entite {
 	@Column(name="grade_nutri_produit", length=50, nullable=false, unique= false)
 	public String grade_nutri_produit;
 	
-	@Column(name="categorie_produit", length=50, nullable=false, unique= false)
+	@Column(name="id_categorie_produit", length=50, nullable=false, unique= false)
 	@ManyToOne
 	@JoinColumn(name="id_categorie")
-	public Categorie categorie_produit;
+	public int id_Categorie_produit;
 	
 	@ManyToMany
 	@JoinTable(name="jointure_produit_marque",
@@ -63,22 +63,22 @@ public class Produit extends Entite {
 	public Set<Additif> listeAdditifsDuProduit;
 	
 
-	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit, Categorie categorieProduit) {
+	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit, int idCategorieProduit) {
 		super();
 		this.id_Produit = id_Produit;
 		this.nom_Produit = nom_Produit;
 		this.grade_nutri_produit = grade_nutri_produit;
-		this.categorie_produit = categorieProduit;
+		this.id_Categorie_produit = idCategorieProduit;
 	}
 
-	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit,  Categorie categorieProduit,
+	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit,  int categorieProduit,
 			Set<Marque> listeMarquesDuProduit, Set<Ingredient> listeIngredientsDuProduit,
 			Set<Allergene> listeAllergenesDuProduit, Set<Additif> listeAdditifsDuProduit) {
 		super();
 		this.id_Produit = id_Produit;
 		this.nom_Produit = nom_Produit;
 		this.grade_nutri_produit = grade_nutri_produit;
-		this.categorie_produit = categorieProduit;
+		this.id_Categorie_produit = categorieProduit;
 		this.listeMarquesDuProduit = listeMarquesDuProduit;
 		this.listeIngredientsDuProduit = listeIngredientsDuProduit;
 		this.listeAllergenesDuProduit = listeAllergenesDuProduit;
@@ -92,7 +92,7 @@ public class Produit extends Entite {
 		listeValeurs.add(Integer.toString(this.id_Produit));
 		listeValeurs.add(this.nom_Produit);
 		listeValeurs.add(this.grade_nutri_produit);
-		listeValeurs.add(Integer.toString(this.categorie_produit.getID()));
+		listeValeurs.add(Integer.toString(this.id_Categorie_produit));
 
 		return listeValeurs;
 	}
