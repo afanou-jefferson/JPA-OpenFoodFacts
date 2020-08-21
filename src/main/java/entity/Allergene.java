@@ -18,7 +18,6 @@ import javax.persistence.Table;
 public class Allergene extends Entite{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int id_Allergene;
 	
 	@Column (name="nom_Allergene", length=200, nullable=false, unique= false)
@@ -58,6 +57,30 @@ public class Allergene extends Entite{
 	public int getID() {
 		// TODO Auto-generated method stub
 		return this.id_Allergene;
+	}
+
+	public int getId_Allergene() {
+		return id_Allergene;
+	}
+
+	public void setId_Allergene(int id_Allergene) {
+		this.id_Allergene = id_Allergene;
+	}
+
+	public String getNom_Allergene() {
+		return nom_Allergene;
+	}
+
+	public void setNom_Allergene(String nom_Allergene) {
+		this.nom_Allergene = nom_Allergene;
+	}
+
+	public Set<Produit> getProduits_allergene() {
+		return produits_allergene;
+	}
+
+	public void setProduits_allergene(Set<Produit> produits_allergene) {
+		this.produits_allergene = produits_allergene;
 	}
 	
 	

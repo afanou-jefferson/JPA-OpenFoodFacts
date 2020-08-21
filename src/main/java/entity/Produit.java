@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,6 @@ import javax.persistence.Table;
 public class Produit extends Entite {
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Produit;
 	
 	@Column(name="nom_produit", length=50, nullable=false, unique= false)
@@ -29,10 +29,9 @@ public class Produit extends Entite {
 	@Column(name="grade_nutri_produit", length=50, nullable=false, unique= false)
 	public String grade_nutri_produit;
 	
-	@Column(name="id_categorie_produit", length=50, nullable=false, unique= false)
-	@ManyToOne
+	@ManyToOne (cascade=CascadeType.ALL)
 	@JoinColumn(name="id_categorie")
-	public int id_Categorie_produit;
+	public Categorie categorie_Produit;
 	
 	@ManyToMany
 	@JoinTable(name="jointure_produit_marque",
@@ -62,23 +61,24 @@ public class Produit extends Entite {
 	)
 	public Set<Additif> listeAdditifsDuProduit;
 	
-
-	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit, int idCategorieProduit) {
+	public Produit() {}
+	
+	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit, Categorie categorieProduit) {
 		super();
 		this.id_Produit = id_Produit;
 		this.nom_Produit = nom_Produit;
 		this.grade_nutri_produit = grade_nutri_produit;
-		this.id_Categorie_produit = idCategorieProduit;
+		this.categorie_Produit = categorieProduit;
 	}
 
-	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit,  int categorieProduit,
+	public Produit(int id_Produit, String nom_Produit, String grade_nutri_produit,  Categorie categorieProduit,
 			Set<Marque> listeMarquesDuProduit, Set<Ingredient> listeIngredientsDuProduit,
 			Set<Allergene> listeAllergenesDuProduit, Set<Additif> listeAdditifsDuProduit) {
 		super();
 		this.id_Produit = id_Produit;
 		this.nom_Produit = nom_Produit;
 		this.grade_nutri_produit = grade_nutri_produit;
-		this.id_Categorie_produit = categorieProduit;
+		this.categorie_Produit = categorieProduit;
 		this.listeMarquesDuProduit = listeMarquesDuProduit;
 		this.listeIngredientsDuProduit = listeIngredientsDuProduit;
 		this.listeAllergenesDuProduit = listeAllergenesDuProduit;
@@ -92,7 +92,7 @@ public class Produit extends Entite {
 		listeValeurs.add(Integer.toString(this.id_Produit));
 		listeValeurs.add(this.nom_Produit);
 		listeValeurs.add(this.grade_nutri_produit);
-		listeValeurs.add(Integer.toString(this.id_Categorie_produit));
+		listeValeurs.add(this.categorie_Produit.getNomUnique());
 
 		return listeValeurs;
 	}
@@ -108,5 +108,71 @@ public class Produit extends Entite {
 		// TODO Auto-generated method stub
 		return this.id_Produit;
 	}
+
+	public int getId_Produit() {
+		return id_Produit;
+	}
+
+	public void setId_Produit(int id_Produit) {
+		this.id_Produit = id_Produit;
+	}
+
+	public String getNom_Produit() {
+		return nom_Produit;
+	}
+
+	public void setNom_Produit(String nom_Produit) {
+		this.nom_Produit = nom_Produit;
+	}
+
+	public String getGrade_nutri_produit() {
+		return grade_nutri_produit;
+	}
+
+	public void setGrade_nutri_produit(String grade_nutri_produit) {
+		this.grade_nutri_produit = grade_nutri_produit;
+	}
+
+	public Categorie getCategorie_Produit() {
+		return categorie_Produit;
+	}
+
+	public void setCategorie_Produit(Categorie categorie_Produit) {
+		this.categorie_Produit = categorie_Produit;
+	}
+
+	public Set<Marque> getListeMarquesDuProduit() {
+		return listeMarquesDuProduit;
+	}
+
+	public void setListeMarquesDuProduit(Set<Marque> listeMarquesDuProduit) {
+		this.listeMarquesDuProduit = listeMarquesDuProduit;
+	}
+
+	public Set<Ingredient> getListeIngredientsDuProduit() {
+		return listeIngredientsDuProduit;
+	}
+
+	public void setListeIngredientsDuProduit(Set<Ingredient> listeIngredientsDuProduit) {
+		this.listeIngredientsDuProduit = listeIngredientsDuProduit;
+	}
+
+	public Set<Allergene> getListeAllergenesDuProduit() {
+		return listeAllergenesDuProduit;
+	}
+
+	public void setListeAllergenesDuProduit(Set<Allergene> listeAllergenesDuProduit) {
+		this.listeAllergenesDuProduit = listeAllergenesDuProduit;
+	}
+
+	public Set<Additif> getListeAdditifsDuProduit() {
+		return listeAdditifsDuProduit;
+	}
+
+	public void setListeAdditifsDuProduit(Set<Additif> listeAdditifsDuProduit) {
+		this.listeAdditifsDuProduit = listeAdditifsDuProduit;
+	}
+	
+	
 
 }

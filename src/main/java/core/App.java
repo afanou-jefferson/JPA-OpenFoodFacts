@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 
 import org.apache.commons.io.FileUtils;
 
+import dao.JPAdaoGenerique;
 import entity.Additif;
 import entity.Allergene;
 import entity.Categorie;
@@ -29,6 +30,7 @@ public class App {
 	File fichierEnLecture;
 	BDDCache localDB;
 	ArrayList<String> stockageRequetesInsert;
+	JPAdaoGenerique dao;
 
 	public int compteurInsertCategorie = 0;
 	public int compteurInsertAdditifs = 0;
@@ -36,12 +38,15 @@ public class App {
 	public int compteurInsertMarques = 0;
 	public int compteurInsertAllergenes = 0;
 	public int compteurInsertProduits = 0;
+	
 
 	public App(File fichierParam) {
 
 		this.fichierEnLecture = fichierParam;
 		this.localDB = new BDDCache();
 		this.stockageRequetesInsert = new ArrayList<String>();
+		this.dao = new JPAdaoGenerique();
+		dao.init();
 
 		Chrono chronoLecture = new Chrono();
 		chronoLecture.start(); // démarrage du chrono
@@ -59,17 +64,17 @@ public class App {
 				String nomProduitClean = NettoyageString.nettoyerString(morceaux[2]);
 				String gradeNutriProduit = morceaux[3];
 
-				int idCategorieProduit = traitementCategorie(morceaux[0]);
+				Categorie categorieProduit = traitementCategorie(morceaux[0]);
 
 				if (localDB.getMemoireLocaleProduitsBDD().get(nomProduitClean) == null) {
 					localDB.setCompteurIDProduit(localDB.getCompteurIDProduit() + 1);
 					int newIDProduit = localDB.getCompteurIDProduit();
-					Produit newProduit = new Produit(newIDProduit, nomProduitClean, gradeNutriProduit, idCategorieProduit,
+					Produit newProduit = new Produit(newIDProduit, nomProduitClean, gradeNutriProduit, categorieProduit,
 							traitementMarques(morceaux[1]), traitementIngredients(morceaux[4]),
 							traitementAllergenes(morceaux[28]), traitementAdditifs(morceaux[29]));
 
-					this.localDB.getMemoireLocaleProduitsBDD().put(nomProduitClean, newProduit);
-					//this.stockageRequetesInsert.addAll(daoGenerique.insert(newProduit));
+					this.localDB.getMemoireLocaleProduitsBDD().put(newProduit.getNomUnique(), newProduit);
+					//dao.insertTable(newProduit);
 					compteurInsertProduits++;
 				}
 				System.out.println(i);
@@ -100,10 +105,9 @@ public class App {
 	 * @param morceauString
 	 * @return un integer qui correspond à l'ID de la catégorie dans la BDD
 	 */
-	public int traitementCategorie(String morceauString) {
+	public Categorie traitementCategorie(String morceauString) {
 
-		//JDBCdaoGenerique daoGenerique = new JDBCdaoGenerique(this.connectionDB);
-		int idCategorieBDD = -1;
+		Categorie categorieTraite;
 
 		String cleanCategorie = NettoyageString.nettoyerString(morceauString);
 
@@ -111,14 +115,13 @@ public class App {
 			localDB.setCompteurIDCategorie(localDB.getCompteurIDCategorie() + 1);
 			Categorie categorieEnLecture = new Categorie(localDB.getCompteurIDCategorie(), cleanCategorie);
 			localDB.getMemoireLocaleCategoriesBDD().put(categorieEnLecture.getNomUnique(), categorieEnLecture);
-			//this.stockageRequetesInsert.addAll(daoGenerique.insert(categorieEnLecture));
-			idCategorieBDD = categorieEnLecture.getID();
+			dao.insertTable(categorieEnLecture);
+			categorieTraite = categorieEnLecture;
 			compteurInsertCategorie++;
 		} else {
-			idCategorieBDD = localDB.getMemoireLocaleCategoriesBDD().get(cleanCategorie).getID();
+			categorieTraite = (Categorie) localDB.getMemoireLocaleCategoriesBDD().get(cleanCategorie);
 		}
-
-		return idCategorieBDD;
+		return categorieTraite;
 	}
 
 	/**
@@ -130,7 +133,6 @@ public class App {
 	 */
 	public Set<Allergene> traitementAllergenes(String morceauString) {
 
-		//JDBCdaoGenerique daoGenerique = new JDBCdaoGenerique(this.connectionDB);
 		Set<Allergene> listAllergenesProduit = new HashSet<Allergene>();
 
 		String[] elemStringAllergene = morceauString.split(",");
@@ -144,7 +146,7 @@ public class App {
 				Allergene allergeneEnLecture = new Allergene(localDB.getCompteurIDAllergene(), cleanAllergene);
 				listAllergenesProduit.add(allergeneEnLecture);
 				localDB.getMemoireLocaleAllergenesBDD().put(allergeneEnLecture.getNomUnique(), allergeneEnLecture);
-				//this.stockageRequetesInsert.addAll(daoGenerique.insert(allergeneEnLecture));
+				dao.insertTable(allergeneEnLecture);
 				compteurInsertAllergenes++;
 			} else {
 				listAllergenesProduit.add((Allergene) localDB.getMemoireLocaleAllergenesBDD().get(cleanAllergene));
@@ -176,7 +178,7 @@ public class App {
 				Marque marqueEnLecture = new Marque(localDB.getCompteurIDMarque(), cleanMarque);
 				listMarquesProduit.add(marqueEnLecture);
 				localDB.getMemoireLocaleMarquesBDD().put(marqueEnLecture.getNomUnique(), marqueEnLecture);
-				//this.stockageRequetesInsert.addAll(daoGenerique.insert(marqueEnLecture));
+				dao.insertTable(marqueEnLecture);
 				compteurInsertMarques++;
 			} else {
 				listMarquesProduit.add((Marque) localDB.getMemoireLocaleMarquesBDD().get(cleanMarque));
@@ -194,7 +196,6 @@ public class App {
 	 */
 	public Set<Ingredient> traitementIngredients(String morceauString) {
 
-		//JDBCdaoGenerique daoGenerique = new JDBCdaoGenerique(this.connectionDB);
 		Set<Ingredient> listIngredientsProduit = new HashSet<Ingredient>();
 
 		String[] elemStringIngredient = morceauString.split(",");
@@ -208,7 +209,7 @@ public class App {
 				Ingredient ingredientEnLecture = new Ingredient(localDB.getCompteurIDIngredient(), cleanIngredient);
 				listIngredientsProduit.add(ingredientEnLecture);
 				localDB.getMemoireLocaleIngredientsBDD().put(ingredientEnLecture.getNomUnique(), ingredientEnLecture);
-				//this.stockageRequetesInsert.addAll(daoGenerique.insert(ingredientEnLecture));
+				dao.insertTable(ingredientEnLecture);
 				compteurInsertIngredients++;
 			} else {
 				listIngredientsProduit.add((Ingredient) localDB.getMemoireLocaleIngredientsBDD().get(cleanIngredient));
@@ -226,7 +227,6 @@ public class App {
 	 */
 	public Set<Additif> traitementAdditifs(String morceauString) {
 
-		//JDBCdaoGenerique daoGenerique = new JDBCdaoGenerique(this.connectionDB);
 		Set<Additif> listAdditifsProduit = new HashSet<Additif>();
 
 		String[] elemStringAdditif = morceauString.split(",");
@@ -242,7 +242,7 @@ public class App {
 				Additif additifEnLecture = new Additif(localDB.getCompteurIDAdditif(), cleanAdditif);
 				listAdditifsProduit.add(additifEnLecture);
 				localDB.getMemoireLocaleAdditifsBDD().put(additifEnLecture.getNomUnique(), additifEnLecture);
-				//this.stockageRequetesInsert.addAll(daoGenerique.insert(additifEnLecture));
+				dao.insertTable(additifEnLecture);
 				compteurInsertAdditifs++;
 			} else {
 				listAdditifsProduit.add((Additif) localDB.getMemoireLocaleAdditifsBDD().get(cleanAdditif));

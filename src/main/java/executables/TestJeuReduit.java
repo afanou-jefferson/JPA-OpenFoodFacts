@@ -32,7 +32,6 @@ public class TestJeuReduit {
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, SQLException {
 
 		File fichier = new File(System.getProperty("user.dir") + "/src/main/resources/jeuTest.csv");
-		// System.out.println("Fichier lisible =" + fichier.canRead());
 
 		Chrono chrono = new Chrono();
 		chrono.start(); // démarrage du chrono

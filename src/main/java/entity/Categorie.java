@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,16 +22,41 @@ import javax.persistence.Table;
 public class Categorie extends Entite{ 
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Categorie;
 
 	@Column(name="nom_categorie", length=200, nullable=false, unique= false)
 	public String nom_Categorie;
 	
-	@OneToMany(mappedBy="categorie_produit")
+	@OneToMany(mappedBy="categorie_Produit")
 	private Set<Produit> produits_categorie;
 	
+	public Categorie() {}
 	
+	
+	public int getId_Categorie() {
+		return id_Categorie;
+	}
+
+	public void setId_Categorie(int id_Categorie) {
+		this.id_Categorie = id_Categorie;
+	}
+
+	public String getNom_Categorie() {
+		return nom_Categorie;
+	}
+
+	public void setNom_Categorie(String nom_Categorie) {
+		this.nom_Categorie = nom_Categorie;
+	}
+
+	public Set<Produit> getProduits_categorie() {
+		return produits_categorie;
+	}
+
+	public void setProduits_categorie(Set<Produit> produits_categorie) {
+		this.produits_categorie = produits_categorie;
+	}
+
 	public Categorie(int id_Categorie, String nom_Categorie) {
 		super();
 		this.id_Categorie = id_Categorie;

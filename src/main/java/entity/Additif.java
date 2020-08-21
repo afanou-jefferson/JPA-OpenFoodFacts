@@ -24,25 +24,27 @@ import javax.persistence.Table;
 public class Additif extends Entite{
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Additif;
 	
 	@Column(name="nom_additif", length=200, nullable=false, unique= false)
 	public String nom_Additif;
 
+	@ManyToMany
+	@JoinTable(name="jointure_produit_additif",
+		joinColumns= @JoinColumn(name="id_additif_jointure", referencedColumnName="id_Additif"),
+		inverseJoinColumns= @JoinColumn(name="id_produit_jointure", referencedColumnName="id_produit")
+	)
+	private Set<Produit> produits_additif;
+
+	
 	public Additif(int id_Additif, String nom_Additif) {
 		super();
 		this.id_Additif = id_Additif;
 		this.nom_Additif = nom_Additif;
 	}
 	
-	@ManyToMany
-	@JoinTable(name="jointure_produit_additif",
-		joinColumns= @JoinColumn(name="id_additif_jointure", referencedColumnName="id_additif"),
-		inverseJoinColumns= @JoinColumn(name="id_produit_jointure", referencedColumnName="id_produit")
-	)
-	private Set<Produit> produits_additif;
-
+	public Additif() {}
+	
 	@Override
 	public String getNomUnique() {
 		// TODO Auto-generated method stub
@@ -65,6 +67,31 @@ public class Additif extends Entite{
 		return this.id_Additif;
 	}
 
+	public int getId_Additif() {
+		return id_Additif;
+	}
+
+	public void setId_Additif(int id_Additif) {
+		this.id_Additif = id_Additif;
+	}
+
+	public String getNom_Additif() {
+		return nom_Additif;
+	}
+
+	public void setNom_Additif(String nom_Additif) {
+		this.nom_Additif = nom_Additif;
+	}
+
+	public Set<Produit> getProduits_additif() {
+		return produits_additif;
+	}
+
+	public void setProduits_additif(Set<Produit> produits_additif) {
+		this.produits_additif = produits_additif;
+	}
+
+	
 
 	
 
