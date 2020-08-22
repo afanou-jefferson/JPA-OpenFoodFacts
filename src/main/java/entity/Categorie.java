@@ -22,6 +22,7 @@ import javax.persistence.Table;
 public class Categorie extends Entite{ 
 	
 	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Categorie;
 
 	@Column(name="nom_categorie", length=200, nullable=false, unique= false)
@@ -31,7 +32,6 @@ public class Categorie extends Entite{
 	private Set<Produit> produits_categorie;
 	
 	public Categorie() {}
-	
 	
 	public int getId_Categorie() {
 		return id_Categorie;
@@ -57,9 +57,8 @@ public class Categorie extends Entite{
 		this.produits_categorie = produits_categorie;
 	}
 
-	public Categorie(int id_Categorie, String nom_Categorie) {
+	public Categorie(String nom_Categorie) {
 		super();
-		this.id_Categorie = id_Categorie;
 		this.nom_Categorie = nom_Categorie;
 	}
 

@@ -23,6 +23,7 @@ import javax.persistence.Table;
 public class Marque extends Entite{
 	
 	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Marque;
 	
 	@Column(name="nom_marque", length=200, nullable=false, unique= false)
@@ -35,9 +36,10 @@ public class Marque extends Entite{
 	)
 	private Set<Produit> produits_marque;
 
-	public Marque(int id_Marque, String nom_Marque) {
+	public Marque () {}
+	
+	public Marque(String nom_Marque) {
 		super();
-		this.id_Marque = id_Marque;
 		this.nom_Marque = nom_Marque;
 	}
 

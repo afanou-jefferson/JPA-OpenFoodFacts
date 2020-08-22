@@ -18,6 +18,7 @@ import javax.persistence.Table;
 public class Allergene extends Entite{
 	
 	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Allergene;
 	
 	@Column (name="nom_Allergene", length=200, nullable=false, unique= false)
@@ -30,10 +31,10 @@ public class Allergene extends Entite{
 	)
 	private Set<Produit> produits_allergene;
 
-
-	public Allergene(int id_Allergene, String nom_Allergene) {
+	public Allergene() {}
+	
+	public Allergene(String nom_Allergene) {
 		super();
-		this.id_Allergene = id_Allergene;
 		this.nom_Allergene = nom_Allergene;
 	}
 	

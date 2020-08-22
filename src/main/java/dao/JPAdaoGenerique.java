@@ -33,7 +33,7 @@ public class JPAdaoGenerique {
 	}
 
 	// Creer un EM et ouvrir une transaction
-	private EntityManager newEntityManager() {
+	public EntityManager newEntityManager() {
 		init();
 		EntityManager em = factory.createEntityManager();
 		em.getTransaction().begin();
@@ -126,11 +126,11 @@ public class JPAdaoGenerique {
 
 	}
 
-	public void insertTable(Entite entiteToInsert) {
+	public void insertTable(Entite entiteToInsert, EntityManager em) {
 
-		EntityManager em = null;
+		// EntityManager em = null;
 
-		em = newEntityManager();
+		// em = newEntityManager();
 
 		switch (entiteToInsert.getNomTable()) {
 

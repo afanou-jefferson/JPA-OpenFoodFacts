@@ -26,6 +26,7 @@ import javax.persistence.Table;
 public class Ingredient extends Entite {
 	
 	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Ingredient;
 	
 	@Column(name="nom_ingredient", length=200, nullable=false, unique= false)
@@ -37,10 +38,11 @@ public class Ingredient extends Entite {
 		inverseJoinColumns= @JoinColumn(name="id_produit_jointure", referencedColumnName="id_produit")
 	)
 	private Set<Produit> produits_ingredient;
+	
+	public Ingredient() {}
 
-	public Ingredient(int id_Ingredient, String nom_Ingredient) {
+	public Ingredient(String nom_Ingredient) {
 		super();
-		this.id_Ingredient = id_Ingredient;
 		this.nom_Ingredient = nom_Ingredient;
 	}
 
