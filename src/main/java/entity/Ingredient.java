@@ -29,7 +29,7 @@ public class Ingredient extends Entite {
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Ingredient;
 	
-	@Column(name="nom_ingredient", length=200, nullable=false, unique= false)
+	@Column(name="nom_ingredient", length=1000, nullable=false, unique= false)
 	public String nom_Ingredient;
 	
 	@ManyToMany

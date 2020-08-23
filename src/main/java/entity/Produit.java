@@ -24,7 +24,7 @@ public class Produit extends Entite {
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	public int id_Produit;
 	
-	@Column(name="nom_produit", length=50, nullable=false, unique= false)
+	@Column(name="nom_produit", length=500, nullable=false, unique= false)
 	public String nom_Produit;
 	
 	@Column(name="grade_nutri_produit", length=50, nullable=false, unique= false)

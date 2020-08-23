@@ -22,6 +22,7 @@ public class JPAdaoGenerique {
 
 	private EntityManagerFactory factory = null;
 
+
 	public void init() {
 		factory = Persistence.createEntityManagerFactory("jpa_OpenFoodFacts");
 	}
@@ -34,7 +35,6 @@ public class JPAdaoGenerique {
 
 	// Creer un EM et ouvrir une transaction
 	public EntityManager newEntityManager() {
-		init();
 		EntityManager em = factory.createEntityManager();
 		em.getTransaction().begin();
 		return (em);
@@ -126,44 +126,58 @@ public class JPAdaoGenerique {
 
 	}
 
-	public void insertTable(Entite entiteToInsert, EntityManager em) {
+	public void insertTable(Entite entiteToInsert) {
 
-		// EntityManager em = null;
+		 EntityManager em = null;
 
-		// em = newEntityManager();
+		try {
+			 em = newEntityManager();
 
-		switch (entiteToInsert.getNomTable()) {
+			switch (entiteToInsert.getNomTable()) {
 
-		case "Additif":
-			Additif additifToInsert = (Additif) entiteToInsert;
-			em.persist(additifToInsert);
-			break;
+			case "Additif":
+				Additif additifToInsert = (Additif) entiteToInsert;
+				em.persist(additifToInsert);
+				break;
 
-		case "Allergene":
-			Allergene allergeneToInsert = (Allergene) entiteToInsert;
-			em.persist(allergeneToInsert);
-			break;
+			case "Allergene":
+				Allergene allergeneToInsert = (Allergene) entiteToInsert;
+				em.persist(allergeneToInsert);
+				break;
 
-		case "Categorie":
-			Categorie categorieToInsert = (Categorie) entiteToInsert;
-			em.persist(categorieToInsert);
-			break;
+			case "Categorie":
+				Categorie categorieToInsert = (Categorie) entiteToInsert;
+				em.persist(categorieToInsert);
+				break;
 
-		case "Ingredient":
-			Ingredient ingredientToInsert = (Ingredient) entiteToInsert;
-			em.persist(ingredientToInsert);
-			break;
+			case "Ingredient":
+				Ingredient ingredientToInsert = (Ingredient) entiteToInsert;
+				em.persist(ingredientToInsert);
+				break;
 
-		case "Marque":
-			Marque marqueToInsert = (Marque) entiteToInsert;
-			em.persist(marqueToInsert);
-			break;
+			case "Marque":
+				Marque marqueToInsert = (Marque) entiteToInsert;
+				em.persist(marqueToInsert);
+				break;
 
-		case "Produit":
-			Produit produitToInsert = (Produit) entiteToInsert;
-			em.persist(produitToInsert);
-			break;
+			case "Produit":
+				Produit produitToInsert = (Produit) entiteToInsert;
+				em.merge(produitToInsert);
+				em.flush();
+				//em.persist(produitToInsert);
+				break;
+
+			}
+
+			em.getTransaction().commit();
+
+		} catch (Exception ex) {
+			em.getTransaction().rollback();
+			closeEntityManager(em);
+			throw ex;
+
+		} finally {
+			closeEntityManager(em);
 		}
-		em.getTransaction().commit();
 	}
 }

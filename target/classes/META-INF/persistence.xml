@@ -17,7 +17,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.MySQL8Dialect" />
 			<!-- Activation de la génération des tables manquantes uniquement -->
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 		</properties>
 	</persistence-unit>
 </persistence>

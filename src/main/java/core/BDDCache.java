@@ -51,6 +51,7 @@ public class BDDCache {
 	public BDDCache() {
 
 		JPAdaoGenerique dao = new JPAdaoGenerique();
+		dao.init();
 
 		this.memoireLocaleAdditifsBDD = dao.selectAllFromEntite(Additif.class.getSimpleName());
 
@@ -63,6 +64,8 @@ public class BDDCache {
 		this.memoireLocaleCategoriesBDD = dao.selectAllFromEntite(Categorie.class.getSimpleName());
 
 		this.memoireLocaleProduitsBDD = dao.selectAllFromEntite(Produit.class.getSimpleName());
+		
+		dao.close();
 
 	}
 

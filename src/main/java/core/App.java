@@ -47,7 +47,9 @@ public class App {
 		this.localDB = new BDDCache();
 		this.stockageRequetesInsert = new ArrayList<String>();
 		this.dao = new JPAdaoGenerique();		
-		this.em = dao.newEntityManager();
+		
+		dao.init();
+
 
 		Chrono chronoLecture = new Chrono();
 		chronoLecture.start(); // démarrage du chrono
@@ -74,7 +76,7 @@ public class App {
 							traitementAllergenes(morceaux[28]), traitementAdditifs(morceaux[29]));
 
 					this.localDB.getMemoireLocaleProduitsBDD().put(newProduit.getNomUnique(), newProduit);
-					//dao.insertTable(newProduit);
+					dao.insertTable(newProduit);
 					compteurInsertProduits++;
 				}
 				System.out.println(i);
@@ -116,7 +118,7 @@ public class App {
 			localDB.setCompteurIDCategorie(localDB.getCompteurIDCategorie() + 1);
 			Categorie categorieEnLecture = new Categorie(cleanCategorie);
 			localDB.getMemoireLocaleCategoriesBDD().put(categorieEnLecture.getNomUnique(), categorieEnLecture);
-			dao.insertTable(categorieEnLecture, em);
+			dao.insertTable(categorieEnLecture);
 			categorieTraite = categorieEnLecture;
 			compteurInsertCategorie++;
 		} else {
@@ -147,7 +149,7 @@ public class App {
 				Allergene allergeneEnLecture = new Allergene(cleanAllergene);
 				listAllergenesProduit.add(allergeneEnLecture);
 				localDB.getMemoireLocaleAllergenesBDD().put(allergeneEnLecture.getNomUnique(), allergeneEnLecture);
-				dao.insertTable(allergeneEnLecture,em);
+				dao.insertTable(allergeneEnLecture);
 				compteurInsertAllergenes++;
 			} else {
 				listAllergenesProduit.add((Allergene) localDB.getMemoireLocaleAllergenesBDD().get(cleanAllergene));
@@ -179,7 +181,7 @@ public class App {
 				Marque marqueEnLecture = new Marque(cleanMarque);
 				listMarquesProduit.add(marqueEnLecture);
 				localDB.getMemoireLocaleMarquesBDD().put(marqueEnLecture.getNomUnique(), marqueEnLecture);
-				dao.insertTable(marqueEnLecture,em);
+				dao.insertTable(marqueEnLecture);
 				compteurInsertMarques++;
 			} else {
 				listMarquesProduit.add((Marque) localDB.getMemoireLocaleMarquesBDD().get(cleanMarque));
@@ -210,7 +212,7 @@ public class App {
 				Ingredient ingredientEnLecture = new Ingredient(cleanIngredient);
 				listIngredientsProduit.add(ingredientEnLecture);
 				localDB.getMemoireLocaleIngredientsBDD().put(ingredientEnLecture.getNomUnique(), ingredientEnLecture);
-				dao.insertTable(ingredientEnLecture,em);
+				dao.insertTable(ingredientEnLecture);
 				compteurInsertIngredients++;
 			} else {
 				listIngredientsProduit.add((Ingredient) localDB.getMemoireLocaleIngredientsBDD().get(cleanIngredient));
@@ -243,7 +245,7 @@ public class App {
 				Additif additifEnLecture = new Additif(cleanAdditif);
 				listAdditifsProduit.add(additifEnLecture);
 				localDB.getMemoireLocaleAdditifsBDD().put(additifEnLecture.getNomUnique(), additifEnLecture);
-				dao.insertTable(additifEnLecture,em );
+				dao.insertTable(additifEnLecture);
 				compteurInsertAdditifs++;
 			} else {
 				listAdditifsProduit.add((Additif) localDB.getMemoireLocaleAdditifsBDD().get(cleanAdditif));
