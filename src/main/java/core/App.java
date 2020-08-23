@@ -50,7 +50,6 @@ public class App {
 		
 		dao.init();
 
-
 		Chrono chronoLecture = new Chrono();
 		chronoLecture.start(); // démarrage du chrono
 
